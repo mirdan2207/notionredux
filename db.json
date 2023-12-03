@@ -1,0 +1,19 @@
+{
+    "users": [
+      {
+        "email": "mak@gmail.com",
+        "password": "1234",
+        "createdAt": "2023-12-03T20:02:58.578Z",
+        "id": 1
+      }
+    ],
+    "notes": [
+      {
+        "userId": 1,
+        "title": "ads",
+        "body": "asddsadsadsa",
+        "createdAt": "2023-12-03T20:03:12.342Z",
+        "id": 1
+      }
+    ]
+  }
