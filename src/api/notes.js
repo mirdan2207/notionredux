@@ -1,4 +1,5 @@
 import { BASE_URL } from "./constants";
+
 export const getUserNotes = (userId) =>
   fetch(`${BASE_URL}/notes?userId=${userId}&_sort=createdAt&_order=DESC`).then(
     (r) => r.json()
@@ -8,6 +9,7 @@ export const deleteNote = (id) =>
   fetch(`${BASE_URL}/notes/${id}`, {
     method: "DELETE",
   }).then((r) => r.json());
+  
 export const getNoteById = (id) =>
   fetch(`${BASE_URL}/notes/${id}`).then((r) => {
     if (r.status !== 200) throw new Error("Not found");

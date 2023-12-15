@@ -1,13 +1,15 @@
 import React from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { useUserContext } from "./UserProvider";
+import { connect } from "react-redux";
+import { logoutUser } from "../redux/action";
 
-const Layout = () => {
-  const { user, signout } = useUserContext();
+const Layout = ({ user, signout }) => {
+  // const { user, signout } = useUserContext();
   return (
     <>
       <header className="container flex gap-2 mx-auto py-1 px-2">
-        <h1>Hello, {user.email}</h1>
+        <h1>Hello, {user?.email}</h1>
         <nav className="ml-auto flex gap-2">
           <NavLink
             to="/"
@@ -38,4 +40,12 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  signout: () => dispatch(logoutUser()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Layout);

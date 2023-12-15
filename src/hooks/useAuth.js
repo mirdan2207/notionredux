@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { loginUser, registerUser } from "../api/user";
+import { logInUser, logoutUser } from "../redux/action";
 
 const USER_KEY = "user";
 
@@ -18,16 +19,17 @@ export default function useAuth() {
         .then((newUser) => {
           setUser(newUser);
           localStorage.setItem(USER_KEY, JSON.stringify(newUser));
+          dispatch(logInUser(newUser));
         })
         .catch(() => {
-          setUser(null);
+          store.dispatch(logoutUser());
           localStorage.removeItem(USER_KEY);
         }),
     []
   );
 
   const signout = useCallback(() => {
-    setUser(null);
+    store.dispatch(logoutUser());
     localStorage.removeItem(USER_KEY);
   }, []);
 

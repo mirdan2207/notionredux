@@ -1,11 +1,13 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createNote } from "../api/notes";
 import { useUserContext } from "../components/UserProvider";
 import { Note } from "../schemas/note";
+import { createNoteAction } from "../redux/action";
 
-const CreateNote = () => {
-  const { user } = useUserContext();
+const CreateNote = ({ createNote }) => {
+  // const { user } = useUserContext();
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
@@ -53,4 +55,8 @@ const CreateNote = () => {
   );
 };
 
-export default CreateNote;
+const mapDispatchToPropsCreateNote = (dispatch) => ({
+  createNote: (note) => dispatch(createNoteAction(note)),
+});
+
+export default connect(null, mapDispatchToPropsCreateNote)(CreateNote);

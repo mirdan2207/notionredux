@@ -14,6 +14,8 @@ import NotesPage from "./routes/NotesPage";
 import SelectedNotePage, { noteLoader } from "./routes/SelectedNotePage";
 import CreateNote from "./routes/CreateNote";
 import EditPage from "./routes/EditPage";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
 const router = createBrowserRouter([
   {
@@ -66,9 +68,11 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <UserProvider>
-      <RouterProvider router={router} />
-    </UserProvider>
+    <Provider store={store}>
+      <UserProvider>
+        <RouterProvider router={router} />
+      </UserProvider>
+    </Provider>
   );
 }
 

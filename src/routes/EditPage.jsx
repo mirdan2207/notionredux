@@ -1,10 +1,12 @@
 import React, { Suspense, useEffect, useState } from "react";
+import { connect } from "react-redux";
 import { Await, Navigate, useLoaderData, useNavigate } from "react-router-dom";
 import { editNote } from "../api/notes";
 import { Note } from "../schemas/note";
+import { editNoteAction } from "../redux/action";
 
-const EditPage = () => {
-  const { id, notePromise } = useLoaderData();
+const EditPage = ({ id, notePromise, editNote }) => {
+  // const { id, notePromise } = useLoaderData();
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [title, setTitle] = useState("");
@@ -66,4 +68,8 @@ const EditPage = () => {
   );
 };
 
-export default EditPage;
+const mapDispatchToPropsEditPage = (dispatch) => ({
+  editNote: (note) => dispatch(editNoteAction(note)),
+});
+
+export default connect(null, mapDispatchToPropsEditPage)(EditPage);

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
+import { connect } from "react-redux";
 import { useUserContext } from "../components/UserProvider";
 import { User } from "../schemas/user";
 import { z } from "zod";
+import { registerUserAction, setRegisterError } from "../redux/action";
 
 const RegisterSchema = User.and(
   z.object({ repeatPassword: z.string() })
@@ -11,8 +13,8 @@ const RegisterSchema = User.and(
   path: ["repeatPassword"],
 });
 
-const RegisterPage = () => {
-  const { signup, user } = useUserContext();
+const RegisterPage = ({ signup, user, registerError, setRegisterError }) => {
+  // const { signup, user } = useUserContext();
   const [errors, setErrors] = useState({});
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,7 +36,15 @@ const RegisterPage = () => {
       return;
     }
 
-    signup(email, password);
+    signup(email, password)
+      .then((newUser) => {
+        store.dispatch(registerUserAction(newUser));
+        localStorage.setItem(USER_KEY, JSON.stringify(newUser));
+      })
+      .catch((error) => {
+        setRegisterError(error.message);
+        localStorage.removeItem(USER_KEY);
+      });
   };
   if (user) {
     return <Navigate to="/" />;
@@ -85,4 +95,17 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+const mapStateToProps = (state) => ({
+  user: state.user,
+  registerError: state.registerError,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  signup: (email, password) => {
+    dispatch(setRegisterError(null));
+    return dispatch(signup(email, password));
+  },
+  setRegisterError: (error) => dispatch(setRegisterError(error)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterPage);
